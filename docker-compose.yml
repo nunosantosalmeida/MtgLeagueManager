@@ -1,0 +1,31 @@
+services:
+  commanderleaguemanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: commanderleaguemanager
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+    restart: on-failure
+
+  postgres:
+    image: postgres:14-alpine
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=quarkus_test
+      - POSTGRES_USER=quarkus_test
+      - POSTGRES_PASSWORD=quarkus_test
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init_user.sql
+      - ./customPostgresql.conf:/etc/postgresql.conf
+      - ./infra/postgres:/docker-entrypoint-initdb.d/
+       ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    command:
+        - postgres -c config_file=/etc/customPostgresql.conf
+
