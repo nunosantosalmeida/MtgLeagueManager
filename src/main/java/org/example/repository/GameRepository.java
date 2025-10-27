@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.WebApplicationException;
+import static org.example.configs.Configs.DRAW_PERCENT_UPGRADE;
 import org.example.model.Game;
 import org.example.model.Player;
 
@@ -48,18 +49,19 @@ public class GameRepository implements PanacheRepository<Game>  {
         // DRAW
         if (game.isDraw()) {
             List<Player> gamePlayers = game.getGamePlayers();
-            AtomicReference<Float> drawPointsSummed = new AtomicReference<>(0F);
+            float drawPointsSummed = 0F;
 
             for (Player gamePlayer : gamePlayers) {
-                drawPointsSummed.updateAndGet(v -> v + gamePlayer.getPoints()*0.07F);
+                drawPointsSummed = drawPointsSummed + (gamePlayer.getPoints() * DRAW_PERCENT_UPGRADE);
             }
 
-            gamePlayers.forEach(player -> player.setPoints(player.getPoints() - (drawPointsSummed.get()/gamePlayers.size())));
+            final float finalDrawPointsSummed = drawPointsSummed;
+            gamePlayers.forEach(player -> player.setPoints(player.getPoints() * DRAW_PERCENT_UPGRADE - (finalDrawPointsSummed /gamePlayers.size())));
+
 
             gamePlayers.forEach(Player::incrementGamesPlayed);
             gamePlayers.forEach(Player::incrementGamesDrawn);
             playerRepository.persistPlayers(gamePlayers);
-            return;
         }
         else {
             // WIN

@@ -32,9 +32,6 @@ import java.util.List;
 public class Games {
 
     @Inject
-    EntityManager em;
-
-    @Inject
     GameMapper gameMapper;
 
     @Inject
@@ -46,41 +43,39 @@ public class Games {
     @CheckedTemplate
     static class Templates {
         public static native TemplateInstance games(List<GameView> gameviews);
-
-        public static native TemplateInstance singlegame(GameView gameview);
-
-        public static native TemplateInstance newgame(List<Player> players);
+        public static native TemplateInstance singleGame(GameView gameview);
+        public static native TemplateInstance newGame(List<Player> players);
     }
 
     @GET
     public TemplateInstance games() {
         List<Game> listGames = gameRepository.listGames();
         listGames.sort(Comparator.comparing(Game::getDate));
-        return Templates.games(listGamesToListGameViews(listGames));
+        return Templates.games(gameMapper.toListGameViews(listGames));
     }
 
     @GET
     @Path("{id}")
     public TemplateInstance singleGame(Integer id) {
         Game game = gameRepository.findGame(id);
-        return Templates.singlegame(gameMapper.toGameView(game));
+        return Templates.singleGame(gameMapper.toGameView(game));
     }
 
     @GET
     @Path("newgame")
-    public TemplateInstance newgame() {
+    public TemplateInstance newGame() {
         List<Player> players = playerRepository.listPlayers();
-        return Templates.newgame(players);
+        return Templates.newGame(players);
     }
 
     @POST
     @Transactional
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("addgame")
-    public TemplateInstance addgame(@RestQuery String confirmationCode,
-        @RestForm String date,
-        @RestForm List<Integer> listPlayersIds,
-        @RestForm String result) {
+    public TemplateInstance addGame(@RestQuery String confirmationCode,
+                                    @RestForm String date,
+                                    @RestForm List<Integer> listPlayersIds,
+                                    @RestForm String result) {
 
         List<Player> gamePlayers = new ArrayList<>();
 
@@ -132,13 +127,7 @@ public class Games {
         listGames.sort(Comparator.comparing(Game::getDate));
         Game updatedGame = gameRepository.findGame(Integer.parseInt(game_id));
 
-        return Templates.singlegame(gameMapper.toGameView(updatedGame));
-    }
-
-    private List<GameView> listGamesToListGameViews(List<Game> listGames) {
-        List<GameView> listGameViews = new ArrayList<>(List.of());
-        listGames.forEach(game -> listGameViews.add(gameMapper.toGameView(game)));
-        return listGameViews;
+        return Templates.singleGame(gameMapper.toGameView(updatedGame));
     }
 
 }

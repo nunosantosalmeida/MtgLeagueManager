@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlayerView {
-    private Long playerId;
+    private Integer playerId;
     private String name;
     private String email;
     private String decklist;

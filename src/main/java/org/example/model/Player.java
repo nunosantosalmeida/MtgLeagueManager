@@ -34,7 +34,7 @@ public class Player extends PanacheEntityBase {
     @GeneratedValue(generator = "playersSequence")
     @SequenceGenerator(name = "playersSequence", sequenceName = "known_players_id_seq", allocationSize = 1, initialValue = 10)
     @Column(name = "player_id")
-    private Long playerId;
+    private Integer playerId;
 
     @Column(name = "dateRegistered")
     private LocalDateTime dateRegistered;

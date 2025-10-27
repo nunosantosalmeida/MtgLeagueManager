@@ -17,6 +17,10 @@ public interface GameMapper {
 
     //GameMapper gameMapper = Mappers.getMapper(GameMapper.class);
 
+    @Mapping(target = "gameId", source = "gameId") // Direct mapping
+    @Mapping(target = "date", source = ".", qualifiedByName = "formatGameDate") // Custom method
+    @Mapping(target = "result", source = ".", qualifiedByName = "getGameResult") // Custom method
+    @Mapping(target = "isFinished", source = "finished") // Direct mapping
     @Mapping(target = "player1", expression = "java(getPlayerName(game.getGamePlayers(), 0))")
     @Mapping(target = "player1id", expression = "java(getPlayerId(game.getGamePlayers(), 0))")
     @Mapping(target = "player2", expression = "java(getPlayerName(game.getGamePlayers(), 1))")
@@ -27,22 +31,20 @@ public interface GameMapper {
     @Mapping(target = "player4id", expression = "java(getPlayerId(game.getGamePlayers(), 3))")
     @Mapping(target = "player5", expression = "java(getPlayerName(game.getGamePlayers(), 4))")
     @Mapping(target = "player5id", expression = "java(getPlayerId(game.getGamePlayers(), 4))")
-    @Mapping(target = "gameId", source = "gameId") // Direct mapping
-    @Mapping(target = "date", source = ".", qualifiedByName = "formatGameDate") // Custom method
-    @Mapping(target = "result", source = ".", qualifiedByName = "getGameResult") // Custom method
-    @Mapping(target = "isFinished", source = "finished") // Direct mapping
-    GameView toGameView(Game game);
+    GameView toGameView(final Game game);
 
-    default String getPlayerName(List<Player> players, int index) {
+    List<GameView> toListGameViews(final List<Game> listGames);
+
+    default String getPlayerName(final List<Player> players, final int index) {
         return (players.size() > index) ? players.get(index).getName() : null;
     }
 
-    default Integer getPlayerId(List<Player> players, int index) {
-        return Math.toIntExact((players.size() > index) ? players.get(index).getPlayerId() : null);
+    default Integer getPlayerId(final List<Player> players, int index) {
+        return (players.size() > index) ? players.get(index).getPlayerId() : null;
     }
 
     @Named("formatGameDate")
-    default String formatGameDate(Game game) {
+    default String formatGameDate(final Game game) {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_FORMAT);
         return game.getDate().toLocalDate().format(dateFormatter) + " - " +
@@ -50,7 +52,7 @@ public interface GameMapper {
     }
 
     @Named("getGameResult")
-    default String getGameResult(Game game) {
+    default String getGameResult(final Game game) {
         if (game.isDraw()) {
             return "Draw";
         }
