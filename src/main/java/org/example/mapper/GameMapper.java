@@ -1,7 +1,7 @@
 package org.example.mapper;
 
-import static org.example.configs.Configs.DATE_FORMAT;
-import static org.example.configs.Configs.TIME_FORMAT;
+import static org.example.Configs.DATE_FORMAT;
+import static org.example.Configs.TIME_FORMAT;
 import org.example.model.Game;
 import org.example.model.Player;
 import org.example.view.GameView;

@@ -5,7 +5,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.WebApplicationException;
-import static org.example.configs.Configs.DRAW_PERCENT_UPGRADE;
+import static org.example.Configs.DRAW_POINTS_DISTRIBUTION_MULTIPLIER;
+import static org.example.Configs.FIVE_PLAYER_POD_WIN_PONDERATION;
+import static org.example.Configs.LOSS_MULTIPLIER;
+import static org.example.Configs.THREE_PLAYER_POD_PONDERATION;
 import org.example.model.Game;
 import org.example.model.Player;
 
@@ -52,11 +55,11 @@ public class GameRepository implements PanacheRepository<Game>  {
             float drawPointsSummed = 0F;
 
             for (Player gamePlayer : gamePlayers) {
-                drawPointsSummed = drawPointsSummed + (gamePlayer.getPoints() * DRAW_PERCENT_UPGRADE);
+                drawPointsSummed = drawPointsSummed + (gamePlayer.getPoints() * DRAW_POINTS_DISTRIBUTION_MULTIPLIER);
             }
 
             final float finalDrawPointsSummed = drawPointsSummed;
-            gamePlayers.forEach(player -> player.setPoints(player.getPoints() * DRAW_PERCENT_UPGRADE - (finalDrawPointsSummed /gamePlayers.size())));
+            gamePlayers.forEach(player -> player.setPoints(player.getPoints() * DRAW_POINTS_DISTRIBUTION_MULTIPLIER - (finalDrawPointsSummed /gamePlayers.size())));
 
 
             gamePlayers.forEach(Player::incrementGamesPlayed);
@@ -78,7 +81,7 @@ public class GameRepository implements PanacheRepository<Game>  {
             gamePlayers.forEach(player -> {
                 // This is done in every game, no matter how many players are playing it
                 if(!Objects.equals(player.getPlayerId(), winner.getPlayerId())) {
-                    float loserPointsLoss = player.getPoints() * 0.07F;
+                    float loserPointsLoss = player.getPoints() * LOSS_MULTIPLIER;
                     player.setPoints(player.getPoints() - loserPointsLoss);
                     player.incrementGamesPlayed();
                     player.incrementGamesLost();
@@ -87,9 +90,11 @@ public class GameRepository implements PanacheRepository<Game>  {
             });
 
             if (game.getGamePlayers().size() == 5) {
-                winner.setPoints(winner.getPoints() + (winnerPointsWon.get()*0.8F));
+                // Win in a 5-player-pod: winner will only get 80% of the points it would normally get
+                winner.setPoints(winner.getPoints() + (winnerPointsWon.get() * FIVE_PLAYER_POD_WIN_PONDERATION));
             } else if (game.getGamePlayers().size() == 3) {
-                winner.setPoints(winner.getPoints() + winnerPointsWon.get() + minPoints*0.07F);
+                // Win in a 3-player-pod: winner gets additional points equal to 7% of the player with the minimum points
+                winner.setPoints(winner.getPoints() + winnerPointsWon.get() + minPoints * THREE_PLAYER_POD_PONDERATION);
             }
             else  {
                 winner.setPoints(winner.getPoints() + winnerPointsWon.get());

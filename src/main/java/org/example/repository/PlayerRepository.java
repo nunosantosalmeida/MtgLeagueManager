@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import static org.example.Configs.PENALTY_MULTIPLIER;
 import org.example.model.Player;
 
 import java.time.LocalDateTime;
@@ -55,7 +56,7 @@ public class PlayerRepository implements PanacheRepository<Player> {
     }
 
     public void applyPenalty(List<Player> playerListNotPresent) {
-        playerListNotPresent.forEach(p -> p.setPoints(p.getPoints() * 0.93f));
+        playerListNotPresent.forEach(p -> p.setPoints(p.getPoints() * PENALTY_MULTIPLIER));
         playerListNotPresent.forEach(this::persistPlayer);
     }
 
