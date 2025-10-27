@@ -1,0 +1,53 @@
+{#include main.html }
+
+<h1>Rounds</h1>
+<h4> Current Round </h4>
+<hr>
+
+<table class="d">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Games</th>
+        <th>Operations</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#for round in rounds}
+    {#if ! round.isRoundFinished}
+    <tr>
+        <td>{round.round_date}</td>
+        <td>{round.round_games}</td>
+        <td>
+            <a href="http://localhost:8080/rounds/closeround/{round.round_id}">Close round</a>
+            <a href="http://localhost:8080/rounds/delete/{round.round_id}">Delete round</a>
+        </td>
+    </tr>
+    {/if}
+    {/for}
+    </tbody>
+</table>
+
+<br>
+<h4> Previous Rounds</h4>
+<hr>
+<table class="d">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Games</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#for round in rounds}
+    {#if round.isRoundFinished}
+    <tr>
+        <td>{round.round_date}</td>
+        <td>{round.round_games}</td>
+    </tr>
+    {/if}
+    {/for}
+    </tbody>
+</table>
+
+{/include}

@@ -1,0 +1,25 @@
+{#include main.html }
+
+<h1>Rounds</h1>
+
+<table class="d">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Date</th>
+            <th>Games</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{round.round_id}</td>
+            <td>{round.round_date}</td>
+            <td>{round.round_games}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h4><a href="http://localhost:8080/rounds/rounds/">Rounds</a></h4>
+<h4><a href="http://localhost:8080/index/">Home</a></h4>
+
+{/include}

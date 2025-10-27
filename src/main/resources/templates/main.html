@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{#insert title /}</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="screen" href="main.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            text-align: center;
+        }
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        th, thead {
+            border: 2px solid black;
+        }
+        td {
+            border: 1px solid black;
+        }
+
+        .top10 {
+            background-color: #d4d4d4;
+        }
+
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        li a:hover {
+          background-color: #111;
+        }
+
+        form  { display: table;      }
+        p     { display: table-row;  }
+        label { display: table-cell; }
+        input { display: table-cell; }
+
+    </style>
+
+</head>
+
+<script>
+function toggleIsPresent(player_id) {
+    fetch("http://localhost:8080/players/toggleispresent/" + player_id);
+}
+
+function updatePointsValue(value) {
+    document.getElementById("initialPoints").value = 1500*Math.pow(0.93, value);
+}
+
+<!--function setwinner(gameid, playerid) {-->
+<!--    console.log("cheguei ao winnerIsSet");-->
+<!--    console.log("gameid: " + gameid);-->
+<!--    console.log("playerid: " + playerid);-->
+
+<!--    fetch("http://localhost:8080/games/setwinner", {-->
+<!--      method: "POST",-->
+<!--      body: JSON.stringify({-->
+<!--        game_id: gameid,-->
+<!--        player_id: playerid-->
+<!--      }),-->
+<!--      headers: {-->
+<!--        "Content-type": "application/json"-->
+<!--      }-->
+<!--    });-->
+<!--}-->
+
+function setwinner(gameid, playerid) {
+    console.log("cheguei ao winnerIsSet");
+    console.log("gameid: " + gameid);
+    console.log("playerid: " + playerid);
+
+    fetch("http://localhost:8080/games/setwinner?game_id=" + gameid + "&player_id=" + playerid);
+    location.reload();
+}
+
+</script>
+
+<body>
+
+<ul>
+    <li> <a href="http://localhost:8080/players/players/">Home</a> </li>
+    <li> <a href="http://localhost:8080/rounds/rounds/">Rounds</a> </li>
+    <li> <a href="http://localhost:8080/games/">Games</a> </li>
+    <li> <a href="http://localhost:8080/players/newplayer/">New player</a> </li>
+    <li> <a href="http://localhost:8080/games/newgame/">New game</a> </li>
+    <li> <a href="http://localhost:8080/rounds/newround/">New random round</a> </li>
+</ul>
+{#insert /}
+</body>
+</html>

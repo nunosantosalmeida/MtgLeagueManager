@@ -7,5 +7,6 @@ public class Configs {
     public static final Integer STARTING_POINTS = 1500;
     public static final double PENALTY_MULTIPLIER = 0.07;
     public static final double LOSS_MULTIPLIER = 0.07;
-    public static final String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
+    public static final String DATE_FORMAT = "yyyy/MM/dd";
+    public static final String TIME_FORMAT = "HH:mm";
 }
