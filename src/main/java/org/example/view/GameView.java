@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 
 @Builder
@@ -12,27 +13,28 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Accessors(chain = true)
 public class GameView {
-    private Long gameId;
+    private Integer gameId;
     @Getter
-    private String gameDate;
+    private String date;
 
     @Builder.Default
     private boolean isFinished = false;
 
     @Builder.Default
-    private String gameResult = "";
+    private String result = "";
 
     private String player1;
-    private Long player1id;
+    private Integer player1id;
     private String player2;
-    private Long player2id;
+    private Integer player2id;
     private String player3;
-    private Long player3id;
+    private Integer player3id;
     private String player4;
-    private Long player4id;
+    private Integer player4id;
     private String player5;
-    private Long player5id;
+    private Integer player5id;
 
     @Override
     public String toString() {

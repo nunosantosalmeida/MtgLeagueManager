@@ -106,7 +106,7 @@ public class Players extends Controller {
 
     private PlayerView playerToPlayerView(final Player player) {
         return PlayerView.builder()
-                .player_id(player.getPlayerId())
+                .playerId(player.getPlayerId())
                 .name(player.getName())
                 .email(player.getEmail())
                 .decklist(player.getDecklist())

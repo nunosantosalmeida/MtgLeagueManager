@@ -19,6 +19,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +32,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "known_games")
-@NamedQuery(name = "Games.findAll", query = "SELECT g FROM Game g ORDER BY g.gameDate", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
+@NamedQuery(name = "Games.findAll", query = "SELECT g FROM Game g ORDER BY g.date", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
+@Accessors(chain = true)
 public class Game extends PanacheEntityBase {
     @Id
     @GeneratedValue(generator = "gamesSequence")
@@ -39,15 +41,15 @@ public class Game extends PanacheEntityBase {
     @Column(name = "game_id")
     private Long gameId;
 
-    @Column(name = "gameDate")
-    private LocalDateTime gameDate;
+    @Column(name = "date")
+    private LocalDateTime date;
 
     @Builder.Default
     private String result = "";
 
     @Builder.Default
     @Column(name = "is_finished")
-    private boolean isFinished = false;
+    private boolean finished = false;
 
     @Builder.Default
     @Column(name = "is_draw")

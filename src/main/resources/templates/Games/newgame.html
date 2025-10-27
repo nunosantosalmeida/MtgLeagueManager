@@ -14,7 +14,7 @@
     <div>
       <select id="listPlayersIds" name="listPlayersIds" size="5" multiple>
         {#for player in players}
-        <option value="{player.player_id}">{player.name}</option>
+        <option value="{player.playerId}">{player.name}</option>
         {/for}
       </select>
     </div>
@@ -23,7 +23,7 @@
 <!--        <option value=""></option>-->
 <!--        <option value=0>Draw</option>-->
 <!--        {#for player in players}-->
-<!--        <option value="{player.player_id}<">{player.name}</option>-->
+<!--        <option value="{player.playerId}<">{player.name}</option>-->
 <!--        {/for}-->
 <!--      </select>-->
 <!--    </div>-->

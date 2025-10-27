@@ -55,7 +55,7 @@ public class Games {
     @GET
     public TemplateInstance games() {
         List<Game> listGames = gameRepository.listGames();
-        listGames.sort(Comparator.comparing(Game::getGameDate));
+        listGames.sort(Comparator.comparing(Game::getDate));
         return Templates.games(listGamesToListGameViews(listGames));
     }
 
@@ -92,7 +92,7 @@ public class Games {
         Collections.shuffle(gamePlayers);
 
         Game gameInsert = Game.builder()
-            .gameDate(date == null || date.isBlank() ? LocalDateTime.now() : LocalDateTime.parse(date))
+            .date(date == null || date.isBlank() ? LocalDateTime.now() : LocalDateTime.parse(date))
             .gamePlayers(gamePlayers)
             .result(result == null || result.isBlank() ? "" : result)
             .build();
@@ -112,24 +112,24 @@ public class Games {
     @GET
     @Transactional
     @Path("setwinner")
-    public TemplateInstance setwinner(@RestQuery String game_id, @RestQuery Integer player_id) {
+    public TemplateInstance setwinner(@RestQuery String game_id, @RestQuery Integer playerId) {
         Game game = gameRepository.findGame(Integer.parseInt(game_id));
 
-        if (player_id.equals(0)) {
+        if (playerId.equals(0)) {
             game.setDraw(true);
             game.setResult("Draw");
         } else {
-            Player player = playerRepository.findPlayer(player_id);
+            Player player = playerRepository.findPlayer(playerId);
             if (player == null) {
-                throw new WebApplicationException("Player with id " + player_id + " does not exist.", 404);
+                throw new WebApplicationException("Player with id " + playerId + " does not exist.", 404);
             }
-            game.setResult(player_id.toString());
+            game.setResult(playerId.toString());
         }
 
         game.setFinished(true);
         gameRepository.persist(game);
         List<Game> listGames = gameRepository.listGames();
-        listGames.sort(Comparator.comparing(Game::getGameDate));
+        listGames.sort(Comparator.comparing(Game::getDate));
         Game updatedGame = gameRepository.findGame(Integer.parseInt(game_id));
 
         return Templates.singlegame(gameMapper.toGameView(updatedGame));

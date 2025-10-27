@@ -22,16 +22,16 @@
         {#if player.rank <=10} <tr class="top10"> {/if}
         {#if player.rank > 10 } <tr> {/if}
                 <td>{player.rank}</td>
-                <td><a href="http://localhost:8080/players/{player.player_id}">{player.name}</a></td>
+                <td><a href="http://localhost:8080/players/{player.playerId}">{player.name}</a></td>
                 <td>{player.points}</td>
                 <td>{player.gamesWon}</td>
                 <td>{player.gamesLost}</td>
                 <td>{player.gamesDrawn}</td>
                 {#if player.isPresent}
-                    <td> <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.player_id})" name="isPresent" checked> </td>
+                    <td> <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent" checked> </td>
                 {/if}
                 {#if !player.isPresent}
-                    <td> <input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.player_id})" name="isPresent"> </td>
+                    <td> <input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent"> </td>
                 {/if}
 
             </tr>

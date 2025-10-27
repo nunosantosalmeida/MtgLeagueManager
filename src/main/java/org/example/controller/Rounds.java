@@ -150,7 +150,7 @@ public class Rounds extends Controller {
         for (int i = 0; i < gamePods.size(); i++) {
             listGames.add(
                     Game.builder()
-                            .gameDate(LocalDateTime.now())
+                            .date(LocalDateTime.now())
                             .gamePlayers(gamePods.get(i))
                             .build()
             );

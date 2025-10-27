@@ -60,8 +60,8 @@
 </head>
 
 <script>
-function toggleIsPresent(player_id) {
-    fetch("http://localhost:8080/players/toggleispresent/" + player_id);
+function toggleIsPresent(playerId) {
+    fetch("http://localhost:8080/players/toggleispresent/" + playerId);
 }
 
 function updatePointsValue(value) {
@@ -77,7 +77,7 @@ function updatePointsValue(value) {
 <!--      method: "POST",-->
 <!--      body: JSON.stringify({-->
 <!--        game_id: gameid,-->
-<!--        player_id: playerid-->
+<!--        playerId: playerid-->
 <!--      }),-->
 <!--      headers: {-->
 <!--        "Content-type": "application/json"-->
@@ -90,7 +90,7 @@ function setwinner(gameid, playerid) {
     console.log("gameid: " + gameid);
     console.log("playerid: " + playerid);
 
-    fetch("http://localhost:8080/games/setwinner?game_id=" + gameid + "&player_id=" + playerid);
+    fetch("http://localhost:8080/games/setwinner?game_id=" + gameid + "&playerId=" + playerid);
     location.reload();
 }
 
