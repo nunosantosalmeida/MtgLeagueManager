@@ -34,10 +34,11 @@ import java.util.List;
 @Table(name = "known_rounds")
 @NamedQuery(name = "Rounds.findAll", query = "SELECT r FROM Round r ORDER BY r.date", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
 public class Round extends PanacheEntityBase {
+
     @Id
     @GeneratedValue(generator = "roundsSequence")
     @SequenceGenerator(name = "roundsSequence", sequenceName = "known_rounds_id_seq", allocationSize = 1, initialValue = 10)
-    @Column(name = "round_id")
+    @Column(name = "round_id", unique = true)
     private Long roundId;
 
     @Column(name = "round_date")
@@ -50,12 +51,9 @@ public class Round extends PanacheEntityBase {
     @Column(name = "is_round_finished")
     private Boolean isRoundFinished = false;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    },
-            fetch=FetchType.EAGER)
-    @JoinTable(name = "round_players_not_present",
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "round_players_not_present",
             joinColumns = @JoinColumn(name = "round_id"),
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
@@ -70,7 +68,4 @@ public class Round extends PanacheEntityBase {
         }
         return roundGamesText.toString();
     }
-
-
-
 }

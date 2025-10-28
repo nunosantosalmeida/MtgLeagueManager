@@ -11,15 +11,15 @@ import java.util.List;
 
 @ApplicationScoped
 public class RoundRepository implements PanacheRepository<Round>  {
+
     @Inject
     EntityManager entityManager;
 
     public List<Round> listRounds() {
-        return entityManager.createNamedQuery("Rounds.findAll", Round.class)
-                .getResultList();
+        return entityManager.createNamedQuery("Rounds.findAll", Round.class).getResultList();
     }
 
-    public Round findRound(Integer roundId) {
+    public Round findRound(final Integer roundId) {
         Round round = entityManager.find(Round.class, roundId);
         if (round == null) {
             throw new WebApplicationException("Round with id of " + roundId + " does not exist.", 404);
@@ -27,11 +27,11 @@ public class RoundRepository implements PanacheRepository<Round>  {
         return round;
     }
 
-    public void persistRound(Round round) {
+    public void persistRound(final Round round) {
         entityManager.persist(round);
     }
 
-    public void persistRounds(List<Round> rounds) {
+    public void persistRounds(final List<Round> rounds) {
         rounds.forEach(round -> entityManager.persist(round));
     }
 

@@ -14,9 +14,11 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import static org.example.Configs.STARTING_POINTS;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @Getter
 @Setter
 @Entity
@@ -33,46 +36,52 @@ public class Player extends PanacheEntityBase {
     @Id
     @GeneratedValue(generator = "playersSequence")
     @SequenceGenerator(name = "playersSequence", sequenceName = "known_players_id_seq", allocationSize = 1, initialValue = 10)
-    @Column(name = "player_id")
+    @Column(name = "player_id", unique = true)
     private Integer playerId;
 
+    @Builder.Default
     @Column(name = "dateRegistered")
-    private LocalDateTime dateRegistered;
+    private LocalDateTime dateRegistered = LocalDateTime.now();
 
     @Builder.Default
-    private Integer rank = 0;
+    @Column(name = "rank", unique = true)
+    private Integer rank = 0; // TODO on next iteration of testing this should be a primitive type
 
     @Column(name = "name", unique = true)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "decklist")
     private String decklist;
 
+    @Builder.Default
     @Column(name = "points")
-    private float points;
+    private float points = STARTING_POINTS;
 
     @Builder.Default
     @NotNull
     @Column(name = "is_present")
-    private Boolean isPresent = false;
+    private boolean isPresent = false;
 
+    @Builder.Default
     @Column(name = "gamesPlayed")
-    private Integer gamesPlayed;
+    private int gamesPlayed = 0;
 
+    @Builder.Default
     @Column(name = "gamesWon")
-    private Integer gamesWon;
+    private int gamesWon = 0;
 
+    @Builder.Default
     @Column(name = "gamesLost")
-    private Integer gamesLost;
+    private int gamesLost = 0;
 
+    @Builder.Default
     @Column(name = "gamesDrawn")
-    private Integer gamesDrawn;
+    private int gamesDrawn = 0;
 
-    @ManyToMany(mappedBy = "playersNotPresent",
-            fetch=FetchType.EAGER)
+    @ManyToMany(mappedBy = "playersNotPresent", fetch = FetchType.EAGER)
     @Builder.Default
     private List<Round> not_present = List.of();
 
@@ -83,18 +92,18 @@ public class Player extends PanacheEntityBase {
     }
 
     public void incrementGamesPlayed() {
-        this.gamesPlayed+=1;
+        this.gamesPlayed += 1;
     }
 
     public void incrementGamesWon() {
-        this.gamesWon+=1;
+        this.gamesWon += 1;
     }
 
     public void incrementGamesLost() {
-        this.gamesLost+=1;
+        this.gamesLost += 1;
     }
 
     public void incrementGamesDrawn() {
-        this.gamesDrawn+=1;
+        this.gamesDrawn += 1;
     }
 }

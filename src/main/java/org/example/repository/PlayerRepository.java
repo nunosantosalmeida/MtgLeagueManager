@@ -19,49 +19,45 @@ public class PlayerRepository implements PanacheRepository<Player> {
     EntityManager entityManager;
 
     public List<Player> listPlayers() {
-        return entityManager.createNamedQuery("Players.findAll", Player.class)
-                .getResultList();
+        List<Player> listPlayers = entityManager.createNamedQuery("Players.findAll", Player.class).getResultList();
+        sortByRanking(listPlayers);
+        return listPlayers;
     }
 
-    public Player findPlayer(Integer id) {
+    public Player findPlayer(final Integer id) {
         return entityManager.find(Player.class, id);
     }
 
-    public void addNewPlayer(String name, String email, String decklist, float points) {
+    public void addNewPlayer(final String name, final String email, final String decklist, final float points) {
         Player playerInsert = Player.builder()
                 .name(name)
                 .email(email)
                 .decklist(decklist)
                 .points(points)
-                .dateRegistered(LocalDateTime.now())
                 .isPresent(true)
-                .gamesPlayed(0)
-                .gamesWon(0)
-                .gamesLost(0)
-                .gamesDrawn(0)
                 .build();
         this.persistPlayer(playerInsert);
     }
 
-    public void deletePlayer(Player player) {
+    public void deletePlayer(final Player player) {
         player.delete();
     }
 
-    public void persistPlayer(Player player) {
+    public void persistPlayer(final Player player) {
         entityManager.persist(player);
     }
 
-    public void persistPlayers(List<Player> players) {
+    public void persistPlayers(final List<Player> players) {
         players.forEach(player -> entityManager.persist(player));
     }
 
-    public void applyPenalty(List<Player> playerListNotPresent) {
+    public void applyPenalty(final List<Player> playerListNotPresent) {
         playerListNotPresent.forEach(p -> p.setPoints(p.getPoints() * PENALTY_MULTIPLIER));
-        playerListNotPresent.forEach(this::persistPlayer);
+        persistPlayers(playerListNotPresent);
     }
 
     public void toggleIsPresent(Player player) {
-        player.setIsPresent(!player.getIsPresent());
+        player.setPresent(!player.isPresent());
         persistPlayer(player);
     }
 
@@ -71,8 +67,8 @@ public class PlayerRepository implements PanacheRepository<Player> {
                 .thenComparing(Player::getGamesWon, Comparator.reverseOrder()));
 
         // Rank players
-        for(int i = 0; i < listPlayers.size(); i++) {
-            listPlayers.get(i).setRank(i+1);
+        for (int i = 0; i < listPlayers.size(); i++) {
+            listPlayers.get(i).setRank(i + 1);
         }
     }
 }

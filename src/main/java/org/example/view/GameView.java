@@ -41,9 +41,9 @@ public class GameView {
         return "["
                 + player1 + ", "
                 + player2 + ", "
-                + player3 + ", "
-                + (player4 != null ? player4 + ", " : "")
-                + (player5 != null ? player5 + ", " : "")
+                + player3
+                + (player4 != null ? ", " + player4 : "")
+                + (player5 != null ? ", " + player5 : "")
                 + "]";
     }
 }

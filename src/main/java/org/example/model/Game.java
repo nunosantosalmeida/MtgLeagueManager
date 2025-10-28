@@ -16,6 +16,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper=false)
 @Getter
 @Setter
 @Entity
@@ -38,11 +40,12 @@ public class Game extends PanacheEntityBase {
     @Id
     @GeneratedValue(generator = "gamesSequence")
     @SequenceGenerator(name = "gamesSequence", sequenceName = "known_games_id_seq", allocationSize = 1, initialValue = 10)
-    @Column(name = "game_id")
+    @Column(name = "game_id", unique = true)
     private Long gameId;
 
+    @Builder.Default
     @Column(name = "date")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @Builder.Default
     private String result = "";
@@ -55,25 +58,23 @@ public class Game extends PanacheEntityBase {
     @Column(name = "is_draw")
     private boolean isDraw = false;
 
-    //@ManyToOne(cascade = CascadeType.PERSIST)
     @ManyToOne
     @JoinColumn(name = "round_games")
     private Round game_round;
 
-    @ManyToMany(cascade = CascadeType.MERGE,
-            fetch=FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @Getter
     private List<Player> players;
 
     @Override
     public String toString() {
-        String game_players_text = "[";
-        for (int i = 0; i < players.size(); i++) {
-            game_players_text = game_players_text.concat(players.get(i).toString());
-            if (i != players.size() - 1)
-                game_players_text = game_players_text.concat( ", ");
+        StringBuilder game_players_text = new StringBuilder("[ ");
+        for (Player player : players) {
+            game_players_text.append(player.toString());
+            if (players.indexOf(player) < players.size() - 1){
+                game_players_text.append(" | ");
+            }
         }
-
-        return game_players_text + "]";
+        return game_players_text.append(" ]").toString();
     }
 }

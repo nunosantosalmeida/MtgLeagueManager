@@ -11,8 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @ApplicationScoped
-public class GameRepository implements PanacheRepository<Game>  {
-
+public class GameRepository implements PanacheRepository<Game> {
 
     @Inject
     EntityManager entityManager;
@@ -23,23 +22,23 @@ public class GameRepository implements PanacheRepository<Game>  {
         return listGames;
     }
 
-    public Game findGame(Integer gameId) {
-        Game game = entityManager.find(Game.class, gameId);;
+    public Game findGame(final Integer gameId) {
+        Game game = entityManager.find(Game.class, gameId);
         if (game == null) {
             throw new WebApplicationException("Game with id of " + gameId + " does not exist.", 404);
         }
         return game;
     }
 
-    public void persistGame(Game game) {
+    public void deleteGame(final Game game) {
+        game.delete();
+    }
+
+    public void persistGame(final Game game) {
         entityManager.persist(game);
     }
 
-    public void persistGames(List<Game> games) {
+    public void persistGames(final List<Game> games) {
         games.forEach(game -> entityManager.persist(game));
-    }
-
-    public void deleteGame(Game game) {
-        entityManager.remove(game);
     }
 }

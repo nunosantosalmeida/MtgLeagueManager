@@ -18,14 +18,14 @@ public class PlayerView {
     private String email;
     private String decklist;
     private String dateRegistered;
-    private Integer rank;
+    private Integer rank;  // TODO on next iteration of testing this should be a primitive type
     private String points;
-    private Boolean isPresent;
+    private boolean isPresent;
 
-    private Integer gamesPlayed;
-    private Integer gamesWon;
-    private Integer gamesLost;
-    private Integer gamesDrawn;
+    private int gamesPlayed;
+    private int gamesWon;
+    private int gamesLost;
+    private int gamesDrawn;
 
     @Override
     public String toString() {

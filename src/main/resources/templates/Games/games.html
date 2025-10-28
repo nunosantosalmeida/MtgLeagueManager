@@ -4,6 +4,12 @@
 <h4> Current Games </h4>
 <hr>
 
+{#if flash.error}
+<div class="error-message">
+    {flash.error}
+</div>
+{/if}
+
 <table style="width: 75%;" class="d">
     <thead>
         <tr>

@@ -24,7 +24,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 @Path("games")
@@ -41,28 +43,28 @@ public class Games {
 
     @CheckedTemplate
     static class Templates {
-        public static native TemplateInstance games(final List<GameView> gameViews);
+        public static native TemplateInstance games(final List<GameView> gameViews, Map<String, String> flash);
         public static native TemplateInstance singleGame(final GameView gameView);
         public static native TemplateInstance newGame(final List<Player> players);
     }
 
     @GET
     public TemplateInstance games() {
-        return Templates.games(gameMapper.toListGameViews(gameRepository.listGames()));
+        Map<String, String> flash = new HashMap<>();
+        flash.put("error", ""); // Set the error message
+        return Templates.games(gameMapper.toListGameViews(gameRepository.listGames()), flash);
     }
 
     @GET
     @Path("{id}")
     public TemplateInstance singleGame(final Integer id) {
-        Game game = gameRepository.findGame(id);
-        return Templates.singleGame(gameMapper.toGameView(game));
+        return Templates.singleGame(gameMapper.toGameView(gameRepository.findGame(id)));
     }
 
     @GET
     @Path("newgame")
     public TemplateInstance newGame() {
-        List<Player> players = playerRepository.listPlayers();
-        return Templates.newGame(players);
+        return Templates.newGame(playerRepository.listPlayers());
     }
 
     @POST
@@ -95,8 +97,13 @@ public class Games {
     @GET
     @Path("delete/{gameId}")
     @Transactional
-    public TemplateInstance delete(Integer gameId) {
+    public TemplateInstance delete(final Integer gameId) {
+        Map<String, String> flash = new HashMap<>();
         Game game = gameRepository.findGame(gameId);
+        if (game == null) {
+            flash.put("error", "Can't start a game that's already finished."); // Set the error message
+            return Templates.games(gameMapper.toListGameViews(gameRepository.listGames()), flash);
+        }
         gameRepository.deleteGame(game);
         return games();
     }

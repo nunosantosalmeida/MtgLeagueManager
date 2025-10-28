@@ -20,9 +20,12 @@ public class RoundView {
     private Long roundId;
     private String date;
     private List<Game> games;
+    @Builder.Default
     private Boolean isRoundFinished = false;
-
+    @Builder.Default
     private List<Player> playersNotPresent = java.util.List.of();
+
+
 
     @Override
     public String toString() {

@@ -105,8 +105,8 @@ public class Rounds extends Controller {
     public TemplateInstance newround() {
         Map<String, String> flash = new HashMap<>();
         flash.put("error", ""); // Set the error message
-        return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.getIsPresent()).toList(),
-                playerRepository.listAll().stream().filter(Player::getIsPresent).toList(),
+        return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.isPresent()).toList(),
+                playerRepository.listAll().stream().filter(Player::isPresent).toList(),
                 flash);
     }
 
@@ -121,11 +121,11 @@ public class Rounds extends Controller {
             rounds();
         }
         // Listar todos os jogadores que não estão presentes
-        List<Player> playerListNotPresent = playerRepository.listAll().stream().filter(p -> !p.getIsPresent()).toList();
+        List<Player> playerListNotPresent = playerRepository.listAll().stream().filter(p -> !p.isPresent()).toList();
         Round round = Round.builder()
                 .date(LocalDateTime.now())
                 .playersNotPresent(playerListNotPresent)
-                .games(getNewRoundGamesList(playerRepository.listAll().stream().filter(Player::getIsPresent).toList()))
+                .games(getNewRoundGamesList(playerRepository.listAll().stream().filter(Player::isPresent).toList()))
                 .build();
         roundRepository.persistRound(round);
 
@@ -156,8 +156,8 @@ public class Rounds extends Controller {
 
         if (playersInVenue.size() < 3) {
             flash.put("error", "Cant start a round with less than 3 players!"); // Set the error message
-            return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.getIsPresent()).toList(),
-                    playerRepository.listAll().stream().filter(Player::getIsPresent).toList(),
+            return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.isPresent()).toList(),
+                    playerRepository.listAll().stream().filter(Player::isPresent).toList(),
                     flash);
         }
 

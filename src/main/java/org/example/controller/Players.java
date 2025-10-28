@@ -12,6 +12,10 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
+import static java.lang.Double.parseDouble;
+import static java.lang.Float.parseFloat;
+import static org.example.Configs.PENALTY_MULTIPLIER;
+import static org.example.Configs.STANDARD_2DECIMAL_PRECISION;
 import static org.example.Configs.STARTING_POINTS;
 import org.example.model.Player;
 import org.example.repository.PlayerRepository;
@@ -32,7 +36,7 @@ public class Players extends Controller {
     static class Templates {
         public static native TemplateInstance players(final List<PlayerView> players);
         public static native TemplateInstance singlePlayer(final PlayerView player);
-        public static native TemplateInstance newPlayer(final int startingPoints);
+        public static native TemplateInstance newPlayer(final float startingPoints);
     }
 
     @GET
@@ -76,8 +80,10 @@ public class Players extends Controller {
                           @RestForm final String name,
                           @RestForm final String email,
                           @RestForm final String decklist,
-                          @RestForm final float points) {
-        playerRepository.addNewPlayer(name, email, decklist, points);
+                          @RestForm String penalties,
+                          @RestForm String initialPoints) {
+        final float initialPointsInt = parseFloat(initialPoints);
+        playerRepository.addNewPlayer(name, email, decklist, (float) (STARTING_POINTS * Math.pow(PENALTY_MULTIPLIER, parseDouble(penalties))));
         players();
     }
 
@@ -107,8 +113,8 @@ public class Players extends Controller {
                 .decklist(player.getDecklist())
                 .dateRegistered(player.getDateRegistered().toString())
                 .rank(player.getRank())
-                .points(String.format("%.2f", player.getPoints()))
-                .isPresent(player.getIsPresent())
+                .points(String.format(STANDARD_2DECIMAL_PRECISION, player.getPoints()))
+                .isPresent(player.isPresent())
                 .gamesPlayed(player.getGamesPlayed())
                 .gamesWon(player.getGamesWon())
                 .gamesLost(player.getGamesLost())

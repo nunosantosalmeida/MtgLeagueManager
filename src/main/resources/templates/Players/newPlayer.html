@@ -19,11 +19,11 @@
     </p>
     <p>
         <label for="penalties">Penalties</label>
-        <input  id="penalties" type="number" value="0"  onchange="updatePointsValue(value)"/>
+        <input name="penalties" id="penalties" type="number" value="0"  onchange="updatePointsValue(value)"/>
     </p>
     <p>
         <label for="initialPoints">Points</label>
-        <input name="points" id="initialPoints" value="1500" disabled />
+        <input name="initialPoints" id="initialPoints" value="{startingPoints}" readonly="readonly"/>
     </p>
     <p>
         <input type="submit" value="Submit">
