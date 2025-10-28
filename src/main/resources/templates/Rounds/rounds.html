@@ -1,0 +1,65 @@
+{#include main.html }
+
+<h1>Rounds</h1>
+<h4> Current Round </h4>
+<hr>
+
+<table style="width: 75%;" class="d">
+    <thead>
+    <tr>
+        <th style="width: 10%;">Date</th>
+        <th style="width: 55%;">Games</th>
+        <th style="width: 10%;">Operations</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#for round in rounds}
+    {#if ! round.isRoundFinished}
+    <tr>
+        <td>{round.date}</td>
+        <td>
+            <a href="http://localhost:8080/rounds/{round.roundId}">
+                {#for game in round.games}
+                {game}<br>
+                {/for}
+            </a>
+        </td>
+        <td>
+            <a href="http://localhost:8080/rounds/closeround/{round.roundId}">Close</a>
+            <a href="http://localhost:8080/rounds/delete/{round.roundId}">Delete</a>
+        </td>
+    </tr>
+    {/if}
+    {/for}
+    </tbody>
+</table>
+
+<br>
+<h4> Previous Rounds</h4>
+<hr>
+<table style="width: 50%;" class="d">
+    <thead>
+    <tr>
+        <th style="width: 10%;"> Date</th>
+        <th style="width: 35%;">Games</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#for round in rounds}
+    {#if round.isRoundFinished}
+    <tr>
+        <td>{round.date}</td>
+        <td>
+            <a href="http://localhost:8080/rounds/{round.roundId}">
+                {#for game in round.games}
+                {game}<br>
+                {/for}
+            </a>
+        </td>
+    </tr>
+    {/if}
+    {/for}
+    </tbody>
+</table>
+
+{/include}

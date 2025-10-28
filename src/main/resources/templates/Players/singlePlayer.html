@@ -1,0 +1,43 @@
+{#include main.html }
+
+<h1>{player.name}</h1>
+
+<table class="d">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Date Registered</td>
+            <td>Name</td>
+            <td>Points</td>
+            <td>Wins</td>
+            <td>Losses</td>
+            <td>Draws</td>
+            <td>Decklist</td>
+            <td>Email</td>
+            <td>Is Present?</td>
+            <td>Operations</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{player.playerId}</td>
+            <td>{player.dateRegistered}</td>
+            <td>{player.name}</td>
+            <td>{player.points}</td>
+            <td>{player.gamesWon}</td>
+            <td>{player.gamesLost}</td>
+            <td>{player.gamesDrawn}</td>
+            <td><a href="{player.decklist}">Link</a></td>
+            <td><a href="mailto:{player.email}">Link</a></td>
+            {#if player.isPresent}
+            <td> <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent" checked> </td>
+            {/if}
+            {#if !player.isPresent}
+            <td> <input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent"> </td>
+            {/if}
+            <td><a href="http://localhost:8080/players/delete/{player.playerId}">Delete Player</a> </td>
+        </tr>
+    </tbody>
+</table>
+
+{/include}

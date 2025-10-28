@@ -1,0 +1,57 @@
+{#include main.html }
+
+<h1>Game {gameView.gameId} of round {gameView.date} </h1>
+
+<table class="d">
+    <thead>
+        <tr>
+            <td>Date</td>
+            <td>Player 1</td>
+            <td>Player 2</td>
+            <td>Player 3</td>
+            {#if gameView.player4}
+            <td>Player 4</td>
+            {/if}
+            {#if gameView.player5}
+            <td>Player 5</td>
+            {/if}
+            <th>Result</th>
+            <td>Change Result</td>
+            <td>Operations</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{gameView.date}</td>
+            <td>{gameView.player1}</td>
+            <td>{gameView.player2}</td>
+            <td>{gameView.player3}</td>
+            {#if gameView.player4}
+            <td>{gameView.player4}</td>
+            {/if}
+            {#if gameView.player5}
+            <td>{gameView.player5}</td>
+            {/if}
+            <th>{gameView.result}</th>
+            <td><select name="dropdown-winner" id="dropdown-winner" value="{gameView.result}" onchange="setwinner({gameView.gameId}, this.options[this.selectedIndex].value)">
+                <option value=""></option>
+                <option value="{gameView.player1id}"> {gameView.player1} </option>
+                <option value="{gameView.player2id}"> {gameView.player2} </option>
+                <option value="{gameView.player3id}"> {gameView.player3} </option>
+                {#if gameView.player4}
+                <option value="{gameView.player4id}"> {gameView.player4} </option>
+                {/if}
+                {#if gameView.player5}
+                <option value="{gameView.player5id}"> {gameView.player5} </option>
+                {/if}
+                <option value=0> Draw </option>
+            </select></td>
+            <td><a href="http://localhost:8080/games/delete/{gameView.gameId}">Delete Game</a> </td>
+        </tr>
+    </tbody>
+</table>
+
+<h4><a href="http://localhost:8080/games/">Games</a></h4>
+<h4><a href="http://localhost:8080/index/">Home</a></h4>
+
+{/include}

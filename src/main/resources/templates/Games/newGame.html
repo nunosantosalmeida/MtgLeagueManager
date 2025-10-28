@@ -1,0 +1,25 @@
+{#include main.html }
+
+<h1>New Game</h1>
+
+
+<form action="http://localhost:8080/games/addgame" enctype="multipart/form-data" method="POST">
+  {#authenticityToken/}
+  <div>
+    <label for="date">Datetime</label>
+    <input type="datetime-local" name="date" id="date" value="" placeholder="date..." />
+  </div>
+
+    <label for="listPlayersIds">Game players:</label>
+    <div>
+      <select id="listPlayersIds" name="listPlayersIds" size="5" multiple>
+        {#for player in players}
+        <option value="{player.playerId}">{player.name}</option>
+        {/for}
+      </select>
+    </div>
+
+  <input type="submit" value="Submit">
+</form>
+
+{/include}

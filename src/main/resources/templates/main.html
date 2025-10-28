@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{#insert title /}</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+
+<script>
+    function moveSelectedOptions(source, destination) {
+        var selectedOptions = Array.from(source.selectedOptions);
+
+        selectedOptions.forEach(option => {
+            destination.appendChild(option);
+        });
+    }
+
+    function moveAllOptions(source, destination) {
+        var allOptions = Array.from(source.options);
+
+        allOptions.forEach(option => {
+            destination.appendChild(option);
+        });
+    }
+
+    function selectAllOptions(listboxId) {
+        const listbox = document.getElementById(listboxId);
+        for (let i = 0; i < listbox.options.length; i++) {
+          listbox.options[i].selected = true;
+        }
+    }
+
+    function toggleIsPresent(player_id) {
+        fetch("http://localhost:8080/players/toggleispresent/" + player_id);
+    }
+
+    function updatePointsValue(value) {
+        document.getElementById("initialPoints").value = 1500*Math.pow(0.93, value);
+    }
+
+    function waitAndReload(milliseconds) {
+        setTimeout(() => {
+            location.reload(true); // Reloads the page, bypassing the cache
+        }, milliseconds);
+    }
+
+    function setwinner(game_id, player_id) {
+        console.log("cheguei ao winnerIsSet");
+        console.log("gameId: " + game_id);
+        console.log("playerid: " + player_id);
+
+        fetch("http://localhost:8080/games/setwinner?gameId=" + game_id + "&playerId=" + player_id);
+        waitAndReload(500);
+    }
+
+</script>
+
+<body>
+
+<ul>
+    <li> <a href="http://localhost:8080/players/players/">Home</a> </li>
+    <li> <a href="http://localhost:8080/rounds/rounds/">Rounds</a> </li>
+    <li> <a href="http://localhost:8080/games/">Games</a> </li>
+    <li> <a href="http://localhost:8080/players/newplayer/">New player</a> </li>
+    <li> <a href="http://localhost:8080/games/newgame/">New game</a> </li>
+    <li> <a href="http://localhost:8080/rounds/newround/">New round</a> </li>
+</ul>
+
+{#insert /}
+</body>
+</html>

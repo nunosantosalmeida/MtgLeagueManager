@@ -1,0 +1,34 @@
+{#include main.html }
+
+<h1>New Player</h1>
+
+
+<form action="http://localhost:8080/players/addplayer" enctype="multipart/form-data" method="POST">
+    {#authenticityToken/}
+    <p>
+        <label for="name">Name</label>
+        <input name="name" id="name" value="" placeholder="Name..." />
+    </p>
+    <p>
+        <label for="email">Email</label>
+        <input name="email" id="email" value="" placeholder="Email..." />
+    </p>
+    <p>
+        <label for="decklist">Decklist</label>
+        <input name="decklist" id="decklist" value="" placeholder="Decklist..." />
+    </p>
+    <p>
+        <label for="penalties">Penalties</label>
+        <input name="penalties" id="penalties" type="number" value="0"  onchange="updatePointsValue(value)"/>
+    </p>
+    <p>
+        <label for="initialPoints">Points</label>
+        <input name="initialPoints" id="initialPoints" value="{startingPoints}" readonly="readonly"/>
+    </p>
+    <p>
+        <input type="submit" value="Submit">
+    </p>
+</form>
+
+
+{/include}

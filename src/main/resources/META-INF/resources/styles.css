@@ -1,0 +1,77 @@
+table {
+            border-collapse: collapse;
+            border: 1px solid black;
+            text-align: center;
+        }
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        th, thead {
+            border: 2px solid black;
+        }
+        td {
+            border: 1px solid black;
+        }
+
+        .top10 {
+            background-color: #d4d4d4;
+        }
+
+        ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        li {
+          float: left;
+        }
+
+        li a {
+          display: block;
+          color: white;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+        }
+
+        li a:hover {
+          background-color: #111;
+        }
+
+        form  { display: table;      }
+        p     { display: table-row;  }
+        label { display: table-cell; }
+        input { display: table-cell; }
+
+        .listbox-area {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            border: 30px;
+        }
+
+        .listbox {
+            width: 200px;
+            height: 300px;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }

@@ -1,0 +1,48 @@
+{#include main.html }
+
+<h1>Commander Precon League Coimbra - Season 3 </h1>
+
+<hr>
+
+<h2>Tournament Standings</h2>
+
+<table style="width: 50%;" class="d">
+    <thead>
+        <tr>
+            <th style="width: 5%;">Rank</th>
+            <th style="width: 15%;">Player</th>
+            <th style="width: 5%;">Points</th>
+            <th style="width: 5%;">Wins</th>
+            <th style="width: 5%;">Losses</th>
+            <th style="width: 5%;">Draws</th>
+            <th style="width: 5%;">Is Present?</th>
+        </tr>
+    </thead>    <tbody>
+        {#for player in players}
+        {#if player.rank <=10} <tr class="top10"> {/if}
+        {#if player.rank > 10 } <tr> {/if}
+                <td>{player.rank}</td>
+                <td><a href="http://localhost:8080/players/{player.playerId}">{player.name}</a></td>
+                <td>{player.points}</td>
+                <td>{player.gamesWon}</td>
+                <td>{player.gamesLost}</td>
+                <td>{player.gamesDrawn}</td>
+                {#if player.isPresent}
+                    <td>
+                        <label for="isPresentChecked"></label>
+                        <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent" checked>
+                    </td>
+                {/if}
+                {#if !player.isPresent}
+                    <td>
+                        <label for="isPresentNotChecked">
+                        </label><input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent">
+                    </td>
+                {/if}
+
+            </tr>
+        {/for}
+    </tbody>
+</table>
+
+{/include}
