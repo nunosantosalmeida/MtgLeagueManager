@@ -70,7 +70,7 @@ public class Game extends PanacheEntityBase {
         String game_players_text = "[";
         for (int i = 0; i < players.size(); i++) {
             game_players_text = game_players_text.concat(players.get(i).toString());
-            if (i != players.size()-1)
+            if (i != players.size() - 1)
                 game_players_text = game_players_text.concat( ", ");
         }
 

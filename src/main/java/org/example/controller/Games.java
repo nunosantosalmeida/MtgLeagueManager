@@ -49,7 +49,7 @@ public class Games {
     @GET
     public TemplateInstance games() {
         List<Game> listGames = gameRepository.listGames();
-        listGames.sort(Comparator.comparing(Game::getDate));
+        listGames.sort(Comparator.comparing(Game::getDate).reversed());
         return Templates.games(gameMapper.toListGameViews(listGames));
     }
 
@@ -106,9 +106,9 @@ public class Games {
     @GET
     @Transactional
     @Path("setwinner")
-    public TemplateInstance setwinner(@RestQuery final String game_id,
+    public TemplateInstance setWinner(@RestQuery final String gameId,
                                       @RestQuery final Integer playerId) {
-        Game game = gameRepository.findGame(Integer.parseInt(game_id));
+        Game game = gameRepository.findGame(Integer.parseInt(gameId));
 
         if (playerId.equals(0)) {
             game.setDraw(true);
@@ -125,7 +125,7 @@ public class Games {
         gameRepository.persist(game);
         List<Game> listGames = gameRepository.listGames();
         listGames.sort(Comparator.comparing(Game::getDate));
-        Game updatedGame = gameRepository.findGame(Integer.parseInt(game_id));
+        Game updatedGame = gameRepository.findGame(Integer.parseInt(gameId));
 
         return Templates.singleGame(gameMapper.toGameView(updatedGame));
     }

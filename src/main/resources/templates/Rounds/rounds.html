@@ -4,12 +4,12 @@
 <h4> Current Round </h4>
 <hr>
 
-<table class="d">
+<table style="width: 75%;" class="d">
     <thead>
     <tr>
-        <th>Date</th>
-        <th>Games</th>
-        <th>Operations</th>
+        <th style="width: 10%;">Date</th>
+        <th style="width: 55%;">Games</th>
+        <th style="width: 10%;">Operations</th>
     </tr>
     </thead>
     <tbody>
@@ -18,9 +18,11 @@
     <tr>
         <td>{round.date}</td>
         <td>
-            {#for game in round.games}
-            {game}<br>
-            {/for}
+            <a href="http://localhost:8080/rounds/{round.roundId}">
+                {#for game in round.games}
+                {game}<br>
+                {/for}
+            </a>
         </td>
         <td>
             <a href="http://localhost:8080/rounds/closeround/{round.roundId}">Close</a>
@@ -35,11 +37,11 @@
 <br>
 <h4> Previous Rounds</h4>
 <hr>
-<table class="d">
+<table style="width: 50%;" class="d">
     <thead>
     <tr>
-        <th>Date</th>
-        <th>Games</th>
+        <th style="width: 10%;"> Date</th>
+        <th style="width: 35%;">Games</th>
     </tr>
     </thead>
     <tbody>
@@ -48,9 +50,11 @@
     <tr>
         <td>{round.date}</td>
         <td>
-            {#for game in round.games}
-            {game}<br>
-            {/for}
+            <a href="http://localhost:8080/rounds/{round.roundId}">
+                {#for game in round.games}
+                {game}<br>
+                {/for}
+            </a>
         </td>
     </tr>
     {/if}

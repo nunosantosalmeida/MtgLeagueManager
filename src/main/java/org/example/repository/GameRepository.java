@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.WebApplicationException;
 import org.example.model.Game;
 
+import java.util.Comparator;
 import java.util.List;
 
 @ApplicationScoped
@@ -17,8 +18,9 @@ public class GameRepository implements PanacheRepository<Game>  {
     EntityManager entityManager;
 
     public List<Game> listGames() {
-        return entityManager.createNamedQuery("Games.findAll", Game.class)
-                .getResultList();
+        List<Game> listGames = entityManager.createNamedQuery("Games.findAll", Game.class).getResultList();
+        listGames.sort(Comparator.comparing(Game::getDate).reversed());
+        return listGames;
     }
 
     public Game findGame(Integer gameId) {

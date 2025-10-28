@@ -4,33 +4,43 @@
 <h4> Current Games </h4>
 <hr>
 
-<table style="width: 65%;" class="d">
+<table style="width: 75%;" class="d">
     <thead>
         <tr>
             <th style="width: 15%;" >Date</th>
-            <th style="width: 65%;" >Players</th>
+            <th style="width: 40%;" >Players</th>
             <th style="width: 20%;" >Result</th>
+            <th style="width: 5%;" >Confirm</th>
         </tr>
     </thead>
     <tbody>
     {#for gameView in gameViews}
     {#if !gameView.isFinished}
         <tr>
-            <td>{gameView.date}</td>
-            <td><a href="http://localhost:8080/games/{gameView.gameId}">{gameView}</a></td>
-            <td><select name="dropdown-winner" id="dropdown-winner" value="{gameView.result}" onchange="setwinner({gameView.gameId}, this.options[this.selectedIndex].value)">
-                <option value=""></option>
-                <option value="{gameView.player1id}"> {gameView.player1} </option>
-                <option value="{gameView.player2id}"> {gameView.player2} </option>
-                <option value="{gameView.player3id}"> {gameView.player3} </option>
-                {#if gameView.player4}
-                <option value="{gameView.player4id}"> {gameView.player4} </option>
-                {/if}
-                {#if gameView.player5}
-                <option value="{gameView.player5id}"> {gameView.player5} </option>
-                {/if}
-                <option value=0> Draw </option>
-            </select></td>
+            <td>
+                {gameview.date}
+            </td>
+            <td>
+                <a href="http://localhost:8080/games/{gameview.game_id}">{gameview}</a>
+            </td>
+            <td>
+                <select style="width: 80%;" id="dropdown_{gameview.game_id}">
+                    <option value=""></option>
+                    <option value="{gameView.player1id}"> {gameView.player1} </option>
+                    <option value="{gameView.player2id}"> {gameView.player2} </option>
+                    <option value="{gameView.player3id}"> {gameView.player3} </option>
+                    {#if gameView.player4}
+                        <option value="{gameView.player4id}"> {gameView.player4} </option>
+                    {/if}
+                    {#if gameView.player5}
+                        <option value="{gameView.player5id}"> {gameView.player5} </option>
+                    {/if}
+                    <option value=0> Draw </option>
+                </select>
+            </td>
+            <td>
+                <button type="button" onclick="setwinner({gameview.game_id}, document.getElementById('dropdown_{gameview.game_id}').value)">Confirm</button>
+            </td>
         </tr>
     {/if}
     {/for}
@@ -41,12 +51,12 @@
 <h4> Previous Games </h4>
 <hr>
 
-<table style="width: 65%;" class="d">
+<table style="width: 50%;" class="d">
     <thead>
     <tr>
-        <th style="width: 15%;" >Date</th>
-        <th style="width: 65%;" >Players</th>
-        <th style="width: 20%;" >Result</th>
+        <th style="width: 10%;" >Date</th>
+        <th style="width: 40%;" >Players</th>
+        <th style="width: 10%;" >Result</th>
     </tr>
     </thead>
     <tbody>

@@ -36,9 +36,8 @@ The next step, is to evolve it into a more comprehensive league management syste
   * final/topX logic
 
 * *High*
-  * Mapper
+  * Mappers
   * Change incorrect GETs to DELETE/POST/UPDATE
-  * landing page passa a ser so os pontos
   * Include penalty count/rounds not played
 
 * *Low*

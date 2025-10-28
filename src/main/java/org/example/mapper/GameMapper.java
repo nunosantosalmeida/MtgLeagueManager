@@ -1,5 +1,6 @@
 package org.example.mapper;
 
+import static java.lang.Integer.parseInt;
 import static org.example.Configs.DATE_FORMAT;
 import static org.example.Configs.TIME_FORMAT;
 import org.example.model.Game;
@@ -11,6 +12,7 @@ import org.mapstruct.Named;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "cdi")
 public interface GameMapper {
@@ -57,6 +59,9 @@ public interface GameMapper {
         if (game.getResult() == null || game.getResult().isEmpty()) {
             return "";
         }
-        return game.getResult();
+
+        final Optional<Player> winnerId = game.getPlayers().stream().filter(p -> p.getPlayerId().equals(parseInt(game.getResult()))).findFirst();
+
+        return winnerId.isPresent() ? winnerId.get().getName() : "";
     }
 }

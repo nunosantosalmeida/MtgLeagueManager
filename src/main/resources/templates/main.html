@@ -4,95 +4,55 @@
 <head>
     <title>{#insert title /}</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="screen" href="main.css">
-    <style>
-        table {
-            border-collapse: collapse;
-            border: 1px solid black;
-            text-align: center;
-        }
-        table {
-            table-layout: fixed;
-            width: 100%;
-        }
-        th, thead {
-            border: 2px solid black;
-        }
-        td {
-            border: 1px solid black;
-        }
-
-        .top10 {
-            background-color: #d4d4d4;
-        }
-
-        ul {
-          list-style-type: none;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          background-color: #333;
-        }
-
-        li {
-          float: left;
-        }
-
-        li a {
-          display: block;
-          color: white;
-          text-align: center;
-          padding: 14px 16px;
-          text-decoration: none;
-        }
-
-        li a:hover {
-          background-color: #111;
-        }
-
-        form  { display: table;      }
-        p     { display: table-row;  }
-        label { display: table-cell; }
-        input { display: table-cell; }
-
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="/styles.css">
 </head>
 
 <script>
-function toggleIsPresent(playerId) {
-    fetch("http://localhost:8080/players/toggleispresent/" + playerId);
-}
+    function moveSelectedOptions(source, destination) {
+        var selectedOptions = Array.from(source.selectedOptions);
 
-function updatePointsValue(value) {
-    document.getElementById("initialPoints").value = 1500*Math.pow(0.93, value);
-}
+        selectedOptions.forEach(option => {
+            destination.appendChild(option);
+        });
+    }
 
-<!--function setwinner(gameid, playerid) {-->
-<!--    console.log("cheguei ao winnerIsSet");-->
-<!--    console.log("gameid: " + gameid);-->
-<!--    console.log("playerid: " + playerid);-->
+    function moveAllOptions(source, destination) {
+        var allOptions = Array.from(source.options);
 
-<!--    fetch("http://localhost:8080/games/setwinner", {-->
-<!--      method: "POST",-->
-<!--      body: JSON.stringify({-->
-<!--        game_id: gameid,-->
-<!--        playerId: playerid-->
-<!--      }),-->
-<!--      headers: {-->
-<!--        "Content-type": "application/json"-->
-<!--      }-->
-<!--    });-->
-<!--}-->
+        allOptions.forEach(option => {
+            destination.appendChild(option);
+        });
+    }
 
-function setwinner(gameid, playerid) {
-    console.log("cheguei ao winnerIsSet");
-    console.log("gameid: " + gameid);
-    console.log("playerid: " + playerid);
+    function selectAllOptions(listboxId) {
+        const listbox = document.getElementById(listboxId);
+        for (let i = 0; i < listbox.options.length; i++) {
+          listbox.options[i].selected = true;
+        }
+    }
 
-    fetch("http://localhost:8080/games/setwinner?game_id=" + gameid + "&playerId=" + playerid);
-    location.reload();
-}
+    function toggleIsPresent(player_id) {
+        fetch("http://localhost:8080/players/toggleispresent/" + player_id);
+    }
+
+    function updatePointsValue(value) {
+        document.getElementById("initialPoints").value = 1500*Math.pow(0.93, value);
+    }
+
+    function waitAndReload(milliseconds) {
+        setTimeout(() => {
+            location.reload(true); // Reloads the page, bypassing the cache
+        }, milliseconds);
+    }
+
+    function setwinner(game_id, player_id) {
+        console.log("cheguei ao winnerIsSet");
+        console.log("gameId: " + game_id);
+        console.log("playerid: " + player_id);
+
+        fetch("http://localhost:8080/games/setwinner?gameId=" + game_id + "&playerId=" + player_id);
+        waitAndReload(500);
+    }
 
 </script>
 
@@ -104,11 +64,8 @@ function setwinner(gameid, playerid) {
     <li> <a href="http://localhost:8080/games/">Games</a> </li>
     <li> <a href="http://localhost:8080/players/newplayer/">New player</a> </li>
     <li> <a href="http://localhost:8080/games/newgame/">New game</a> </li>
+    <li> <a href="http://localhost:8080/rounds/newround/">New round</a> </li>
 </ul>
-<form action="http://localhost:8080/rounds/newround/" enctype="multipart/form-data" method="POST">
-    {#authenticityToken/}
-    <button type="submit" name="submit_param" value="submit_value" class="link-button">New random round</button>
-</form>
 
 {#insert /}
 </body>
