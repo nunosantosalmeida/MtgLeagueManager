@@ -104,8 +104,12 @@ function setwinner(gameid, playerid) {
     <li> <a href="http://localhost:8080/games/">Games</a> </li>
     <li> <a href="http://localhost:8080/players/newplayer/">New player</a> </li>
     <li> <a href="http://localhost:8080/games/newgame/">New game</a> </li>
-    <li> <a href="http://localhost:8080/rounds/newround/">New random round</a> </li>
 </ul>
+<form action="http://localhost:8080/rounds/newround/" enctype="multipart/form-data" method="POST">
+    {#authenticityToken/}
+    <button type="submit" name="submit_param" value="submit_value" class="link-button">New random round</button>
+</form>
+
 {#insert /}
 </body>
 </html>

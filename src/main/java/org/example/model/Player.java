@@ -71,7 +71,7 @@ public class Player extends PanacheEntityBase {
     @Column(name = "gamesDrawn")
     private Integer gamesDrawn;
 
-    @ManyToMany(mappedBy = "players_not_present",
+    @ManyToMany(mappedBy = "playersNotPresent",
             fetch=FetchType.EAGER)
     @Builder.Default
     private List<Round> not_present = List.of();

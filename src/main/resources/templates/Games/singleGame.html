@@ -1,6 +1,6 @@
 {#include main.html }
 
-<h1>Game {gameview.gameId} of round {gameview.date} </h1>
+<h1>Game {gameView.gameId} of round {gameView.date} </h1>
 
 <table class="d">
     <thead>
@@ -9,10 +9,10 @@
             <td>Player 1</td>
             <td>Player 2</td>
             <td>Player 3</td>
-            {#if gameview.player4}
+            {#if gameView.player4}
             <td>Player 4</td>
             {/if}
-            {#if gameview.player5}
+            {#if gameView.player5}
             <td>Player 5</td>
             {/if}
             <th>Result</th>
@@ -22,31 +22,31 @@
     </thead>
     <tbody>
         <tr>
-            <td>{gameview.date}</td>
-            <td>{gameview.player1}</td>
-            <td>{gameview.player2}</td>
-            <td>{gameview.player3}</td>
-            {#if gameview.player4}
-            <td>{gameview.player4}</th>
+            <td>{gameView.date}</td>
+            <td>{gameView.player1}</td>
+            <td>{gameView.player2}</td>
+            <td>{gameView.player3}</td>
+            {#if gameView.player4}
+            <td>{gameView.player4}</th>
             {/if}
-            {#if gameview.player5}
-            <td>{gameview.player5}</td>
+            {#if gameView.player5}
+            <td>{gameView.player5}</td>
             {/if}
-            <th>{gameview.result}</th>
-            <td><select name="dropdown-winner" id="dropdown-winner" value="{gameview.result}" onchange="setwinner({gameview.gameId}, this.options[this.selectedIndex].value)">
+            <th>{gameView.result}</th>
+            <td><select name="dropdown-winner" id="dropdown-winner" value="{gameView.result}" onchange="setwinner({gameView.gameId}, this.options[this.selectedIndex].value)">
                 <option value=""></option>
-                <option value="{gameview.player1id}"> {gameview.player1} </option>
-                <option value="{gameview.player2id}"> {gameview.player2} </option>
-                <option value="{gameview.player3id}"> {gameview.player3} </option>
-                {#if gameview.player4}
-                <option value="{gameview.player4id}"> {gameview.player4} </option>
+                <option value="{gameView.player1id}"> {gameView.player1} </option>
+                <option value="{gameView.player2id}"> {gameView.player2} </option>
+                <option value="{gameView.player3id}"> {gameView.player3} </option>
+                {#if gameView.player4}
+                <option value="{gameView.player4id}"> {gameView.player4} </option>
                 {/if}
-                {#if gameview.player5}
-                <option value="{gameview.player5id}"> {gameview.player5} </option>
+                {#if gameView.player5}
+                <option value="{gameView.player5id}"> {gameView.player5} </option>
                 {/if}
                 <option value=0> Draw </option>
             </select></td>
-            <td><a href="http://localhost:8080/games/delete/{gameview.gameId}">Delete Game</a> </td>
+            <td><a href="http://localhost:8080/games/delete/{gameView.gameId}">Delete Game</a> </td>
         </tr>
     </tbody>
 </table>

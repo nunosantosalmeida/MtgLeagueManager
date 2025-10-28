@@ -63,14 +63,14 @@ public class Game extends PanacheEntityBase {
     @ManyToMany(cascade = CascadeType.MERGE,
             fetch=FetchType.EAGER)
     @Getter
-    private List<Player> gamePlayers;
+    private List<Player> players;
 
     @Override
     public String toString() {
         String game_players_text = "[";
-        for(int i = 0; i < gamePlayers.size(); i++) {
-            game_players_text = game_players_text.concat(gamePlayers.get(i).toString());
-            if(i!=gamePlayers.size()-1)
+        for (int i = 0; i < players.size(); i++) {
+            game_players_text = game_players_text.concat(players.get(i).toString());
+            if (i != players.size()-1)
                 game_players_text = game_players_text.concat( ", ");
         }
 

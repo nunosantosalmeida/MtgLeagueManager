@@ -1,11 +1,10 @@
 package org.example;
 
 import io.quarkus.test.junit.QuarkusTest;
-import org.junit.Test;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
+import org.junit.Test;
 
 @QuarkusTest
 public class TournamentApplicationTest {

@@ -4,7 +4,6 @@ import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -42,9 +41,9 @@ public class Games {
 
     @CheckedTemplate
     static class Templates {
-        public static native TemplateInstance games(List<GameView> gameviews);
-        public static native TemplateInstance singleGame(GameView gameview);
-        public static native TemplateInstance newGame(List<Player> players);
+        public static native TemplateInstance games(final List<GameView> gameViews);
+        public static native TemplateInstance singleGame(final GameView gameView);
+        public static native TemplateInstance newGame(final List<Player> players);
     }
 
     @GET
@@ -56,7 +55,7 @@ public class Games {
 
     @GET
     @Path("{id}")
-    public TemplateInstance singleGame(Integer id) {
+    public TemplateInstance singleGame(final Integer id) {
         Game game = gameRepository.findGame(id);
         return Templates.singleGame(gameMapper.toGameView(game));
     }
@@ -72,10 +71,10 @@ public class Games {
     @Transactional
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("addgame")
-    public TemplateInstance addGame(@RestQuery String confirmationCode,
-                                    @RestForm String date,
-                                    @RestForm List<Integer> listPlayersIds,
-                                    @RestForm String result) {
+    public TemplateInstance addGame(@RestQuery final String confirmationCode,
+                                    @RestForm final String date,
+                                    @RestForm final List<Integer> listPlayersIds,
+                                    @RestForm final String result) {
 
         List<Player> gamePlayers = new ArrayList<>();
 
@@ -88,7 +87,7 @@ public class Games {
 
         Game gameInsert = Game.builder()
             .date(date == null || date.isBlank() ? LocalDateTime.now() : LocalDateTime.parse(date))
-            .gamePlayers(gamePlayers)
+            .players(gamePlayers)
             .result(result == null || result.isBlank() ? "" : result)
             .build();
         gameRepository.persistGame(gameInsert);
@@ -98,7 +97,7 @@ public class Games {
     @GET
     @Path("delete/{gameId}")
     @Transactional
-    public void delete(Integer gameId) {
+    public void delete(final Integer gameId) {
         Game game = gameRepository.findGame(gameId);
         game.delete();
         games();
@@ -107,7 +106,8 @@ public class Games {
     @GET
     @Transactional
     @Path("setwinner")
-    public TemplateInstance setwinner(@RestQuery String game_id, @RestQuery Integer playerId) {
+    public TemplateInstance setwinner(@RestQuery final String game_id,
+                                      @RestQuery final Integer playerId) {
         Game game = gameRepository.findGame(Integer.parseInt(game_id));
 
         if (playerId.equals(0)) {

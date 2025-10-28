@@ -32,20 +32,19 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "known_rounds")
-@NamedQuery(name = "Rounds.findAll", query = "SELECT r FROM Round r ORDER BY r.round_date", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
+@NamedQuery(name = "Rounds.findAll", query = "SELECT r FROM Round r ORDER BY r.date", hints = @QueryHint(name = "org.hibernate.cacheable", value = "true"))
 public class Round extends PanacheEntityBase {
     @Id
     @GeneratedValue(generator = "roundsSequence")
     @SequenceGenerator(name = "roundsSequence", sequenceName = "known_rounds_id_seq", allocationSize = 1, initialValue = 10)
     @Column(name = "round_id")
-    private Long round_id;
+    private Long roundId;
 
     @Column(name = "round_date")
-    private LocalDateTime round_date;
+    private LocalDateTime date;
 
     @OneToMany(mappedBy = "game_round", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    //@OneToMany(mappedBy = "game_round")
-    private List<Game> round_games;
+    private List<Game> games;
 
     @Builder.Default
     @Column(name = "is_round_finished")
@@ -61,15 +60,15 @@ public class Round extends PanacheEntityBase {
             inverseJoinColumns = @JoinColumn(name = "player_id")
     )
     @Builder.Default
-    private List<Player> players_not_present = List.of();
+    private List<Player> playersNotPresent = List.of();
 
     @Override
     public String toString() {
-        String round_games_text = "[";
-        for(int i = 0; i < round_games.size(); i++) {
-            round_games_text = round_games_text.concat(round_games.get(i).toString() + "\n");
+        StringBuilder roundGamesText = new StringBuilder();
+        for (Game roundGame : games) {
+            roundGamesText.append(roundGame.toString()).append("<br/>");
         }
-        return round_games_text + "]";
+        return roundGamesText.toString();
     }
 
 

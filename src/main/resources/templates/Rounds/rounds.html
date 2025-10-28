@@ -16,11 +16,15 @@
     {#for round in rounds}
     {#if ! round.isRoundFinished}
     <tr>
-        <td>{round.round_date}</td>
-        <td>{round.round_games}</td>
+        <td>{round.date}</td>
         <td>
-            <a href="http://localhost:8080/rounds/closeround/{round.round_id}">Close round</a>
-            <a href="http://localhost:8080/rounds/delete/{round.round_id}">Delete round</a>
+            {#for game in round.games}
+            {game}<br>
+            {/for}
+        </td>
+        <td>
+            <a href="http://localhost:8080/rounds/closeround/{round.roundId}">Close</a>
+            <a href="http://localhost:8080/rounds/delete/{round.roundId}">Delete</a>
         </td>
     </tr>
     {/if}
@@ -42,8 +46,12 @@
     {#for round in rounds}
     {#if round.isRoundFinished}
     <tr>
-        <td>{round.round_date}</td>
-        <td>{round.round_games}</td>
+        <td>{round.date}</td>
+        <td>
+            {#for game in round.games}
+            {game}<br>
+            {/for}
+        </td>
     </tr>
     {/if}
     {/for}
