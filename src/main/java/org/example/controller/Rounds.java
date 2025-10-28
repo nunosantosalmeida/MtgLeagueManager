@@ -13,23 +13,29 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import lombok.extern.slf4j.Slf4j;
+import static org.example.Configs.DATE_FORMAT;
 import static org.example.Configs.DRAW_POINTS_DISTRIBUTION_MULTIPLIER;
 import static org.example.Configs.FIVE_PLAYER_POD_WIN_PONDERATION;
 import static org.example.Configs.LOSS_MULTIPLIER;
 import static org.example.Configs.THREE_PLAYER_POD_PONDERATION;
+import static org.example.Configs.TIME_FORMAT;
 import org.example.model.Game;
 import org.example.model.Player;
 import org.example.model.Round;
 import org.example.repository.GameRepository;
 import org.example.repository.PlayerRepository;
 import org.example.repository.RoundRepository;
+import org.example.view.RoundView;
+import org.jboss.resteasy.reactive.RestForm;
 import org.jboss.resteasy.reactive.RestQuery;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,13 +45,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Rounds extends Controller {
 
     @Inject
-    private final GameRepository gameRepository;
+    private GameRepository gameRepository;
 
     @Inject
-    private final PlayerRepository playerRepository;
+    private PlayerRepository playerRepository;
 
     @Inject
-    private final RoundRepository roundRepository;
+    private RoundRepository roundRepository;
 
     public Rounds(final GameRepository gameRepository, final PlayerRepository playerRepository, final RoundRepository roundRepository) {
         this.gameRepository = gameRepository;
@@ -55,26 +61,30 @@ public class Rounds extends Controller {
 
     @CheckedTemplate
     static class Templates {
-        public static native TemplateInstance rounds(final List<Round> rounds);
-        public static native TemplateInstance singleRoundFinished(final Round round);
-        public static native TemplateInstance singleRoundNotFinished(final Round round);
+        public static native TemplateInstance rounds(final List<RoundView> rounds);
+        public static native TemplateInstance newRound(final List<Player> playersNotPresent,
+                                                       final List<Player> playersPresent,
+                                                       final Map<String, String> flash);
+        public static native TemplateInstance singleRoundFinished(final RoundView round);
+        public static native TemplateInstance singleRoundNotFinished(final RoundView round);
     }
 
     @GET
     public TemplateInstance rounds() {
         List<Round> listRounds = roundRepository.listRounds();
         listRounds.sort(Comparator.comparing(Round::getRoundId));
-        return Templates.rounds(listRounds);
+        List<RoundView> listRoundsView = listRounds.stream().map(this::roundToRoundView).toList();
+        return Templates.rounds(listRoundsView);
     }
 
     @GET
     @Path("{roundId}")
-    public TemplateInstance round(final Integer roundId) {
+    public TemplateInstance singleRound(final Integer roundId) {
         Round round = roundRepository.findRound(roundId);
         if (round.getIsRoundFinished())
-            return Templates.singleRoundFinished(round);
+            return Templates.singleRoundFinished(roundToRoundView(round));
 
-        return Templates.singleRoundNotFinished(round);
+        return Templates.singleRoundNotFinished(roundToRoundView(round));
     }
 
     @GET
@@ -90,11 +100,21 @@ public class Rounds extends Controller {
         rounds();
     }
 
+    @GET
+    @Path("newround")
+    public TemplateInstance newround() {
+        Map<String, String> flash = new HashMap<>();
+        flash.put("error", ""); // Set the error message
+        return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.getIsPresent()).toList(),
+                playerRepository.listAll().stream().filter(Player::getIsPresent).toList(),
+                flash);
+    }
+
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Transactional
-    @Path("newround")
-    public void newround(@RestQuery final String confirmationCode) {
+    @Path("newroundOLD")
+    public void newroundOLD(@RestQuery final String confirmationCode) {
         // Listar rondas e verificar se já existe alguma por terminar. Caso nao exista, podemos avançar
         List<Round> listRounds = roundRepository.listRounds();
         if (listRounds.stream().anyMatch(r -> !r.getIsRoundFinished())) {
@@ -105,7 +125,7 @@ public class Rounds extends Controller {
         Round round = Round.builder()
                 .date(LocalDateTime.now())
                 .playersNotPresent(playerListNotPresent)
-                .games(getNewRoundGamesList())
+                .games(getNewRoundGamesList(playerRepository.listAll().stream().filter(Player::getIsPresent).toList()))
                 .build();
         roundRepository.persistRound(round);
 
@@ -118,6 +138,55 @@ public class Rounds extends Controller {
 
         listRounds.sort(Comparator.comparing(Round::getRoundId));
         rounds();
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Transactional
+    @Path("newround")
+    public TemplateInstance newroundNew(@RestQuery String confirmationCode, @RestForm List<Integer> listPlayersIds) {
+
+        Map<String, String> flash = new HashMap<>();
+        final List<Player> playersInVenue = new ArrayList<>();
+
+        for (Integer id : listPlayersIds) {
+            Player player = playerRepository.findPlayer(id);
+            playersInVenue.add(player);
+        }
+
+        if (playersInVenue.size() < 3) {
+            flash.put("error", "Cant start a round with less than 3 players!"); // Set the error message
+            return Templates.newRound(playerRepository.listAll().stream().filter(p -> !p.getIsPresent()).toList(),
+                    playerRepository.listAll().stream().filter(Player::getIsPresent).toList(),
+                    flash);
+        }
+
+        Collections.shuffle(playersInVenue);
+
+        // Listar rondas e verificar se já existe alguma por terminar. Caso nao exista, podemos avançar
+        List<Round> listRounds = roundRepository.listRounds();
+        if (listRounds.stream().anyMatch(r -> !r.getIsRoundFinished())) {
+            rounds();
+        }
+        // Listar todos os jogadores que não estão presentes
+        List<Player> playerListNotPresent = playerRepository.listAll();
+        playerListNotPresent.removeIf(playersInVenue::contains);
+
+        Round round = Round.builder()
+                .date(LocalDateTime.now())
+                .playersNotPresent(playerListNotPresent)
+                .games(getNewRoundGamesList(playersInVenue))
+                .build();
+
+        roundRepository.persistRound(round);
+        roundRepository.persistRounds(roundRepository.listRounds());
+        round.getGames().forEach(game -> game.setGame_round(round));
+        gameRepository.persistGames(gameRepository.listGames());
+
+        playerRepository.persistPlayers(playerRepository.listPlayers());
+
+        listRounds.sort(Comparator.comparing(Round::getRoundId));
+        return rounds();
     }
 
     @GET
@@ -147,9 +216,7 @@ public class Rounds extends Controller {
         rounds();
     }
 
-    private List<Game> getNewRoundGamesList() {
-
-        List<Player> playerListPresent = new ArrayList<>(playerRepository.listAll().stream().filter(Player::getIsPresent).toList());
+    private List<Game> getNewRoundGamesList(final List<Player> playerListPresent) {
 
         // Get the optimal pod distribution for the available players
         List<Integer> podDistribution = getRoundPodsConfiguration(playerListPresent.size());
@@ -279,4 +346,13 @@ public class Rounds extends Controller {
         playerRepository.persistPlayers(gamePlayers);
     }
 
+    private RoundView roundToRoundView(Round round) {
+        return RoundView.builder()
+                .roundId(round.getRoundId())
+                .date(round.getDate().toLocalDate().format(java.time.format.DateTimeFormatter.ofPattern(DATE_FORMAT)) + " - " + round.getDate().toLocalTime().format(java.time.format.DateTimeFormatter.ofPattern(TIME_FORMAT)))
+                .games(round.getGames())
+                .isRoundFinished(round.getIsRoundFinished())
+                .playersNotPresent(round.getPlayersNotPresent())
+                .build();
+    }
 }

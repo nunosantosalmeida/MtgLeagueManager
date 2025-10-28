@@ -18,13 +18,13 @@
     {#if !gameView.isFinished}
         <tr>
             <td>
-                {gameview.date}
+                {gameView.date}
             </td>
             <td>
-                <a href="http://localhost:8080/games/{gameview.game_id}">{gameview}</a>
+                <a href="http://localhost:8080/games/{gameView.gameId}">{gameView}</a>
             </td>
             <td>
-                <select style="width: 80%;" id="dropdown_{gameview.game_id}">
+                <select style="width: 80%;" id="dropdown_{gameView.gameId}">
                     <option value=""></option>
                     <option value="{gameView.player1id}"> {gameView.player1} </option>
                     <option value="{gameView.player2id}"> {gameView.player2} </option>
@@ -39,7 +39,7 @@
                 </select>
             </td>
             <td>
-                <button type="button" onclick="setwinner({gameview.game_id}, document.getElementById('dropdown_{gameview.game_id}').value)">Confirm</button>
+                <button type="button" onclick="setwinner({gameView.gameId}, document.getElementById('dropdown_{gameView.gameId}').value)">Confirm</button>
             </td>
         </tr>
     {/if}

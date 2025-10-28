@@ -48,9 +48,7 @@ public class Games {
 
     @GET
     public TemplateInstance games() {
-        List<Game> listGames = gameRepository.listGames();
-        listGames.sort(Comparator.comparing(Game::getDate).reversed());
-        return Templates.games(gameMapper.toListGameViews(listGames));
+        return Templates.games(gameMapper.toListGameViews(gameRepository.listGames()));
     }
 
     @GET
@@ -97,10 +95,10 @@ public class Games {
     @GET
     @Path("delete/{gameId}")
     @Transactional
-    public void delete(final Integer gameId) {
+    public TemplateInstance delete(Integer gameId) {
         Game game = gameRepository.findGame(gameId);
-        game.delete();
-        games();
+        gameRepository.deleteGame(game);
+        return games();
     }
 
     @GET
@@ -123,8 +121,6 @@ public class Games {
 
         game.setFinished(true);
         gameRepository.persist(game);
-        List<Game> listGames = gameRepository.listGames();
-        listGames.sort(Comparator.comparing(Game::getDate));
         Game updatedGame = gameRepository.findGame(Integer.parseInt(gameId));
 
         return Templates.singleGame(gameMapper.toGameView(updatedGame));

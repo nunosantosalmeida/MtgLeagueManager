@@ -16,7 +16,7 @@
             <label for="listbox1">Not Present:</label>
             <select id="listbox1" class="listbox" multiple size="25">
                 {#for player in playersNotPresent}
-                <option value="{player.player_id}">{player.name}</option>
+                <option value="{player.playerId}">{player.name}</option>
                 {/for}
             </select>
         </div>
@@ -32,7 +32,7 @@
             <label for="listbox2" >Present:</label>
             <select id="listbox2" name="listPlayersIds" class="listbox" multiple size="25">
                 {#for player in playersPresent}
-                <option value="{player.player_id}" selected>{player.name}</option>
+                <option value="{player.playerId}" selected>{player.name}</option>
                 {/for}
             </select>
         </div>
