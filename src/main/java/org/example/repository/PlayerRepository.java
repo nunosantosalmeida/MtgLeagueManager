@@ -7,7 +7,6 @@ import jakarta.persistence.EntityManager;
 import static org.example.Configs.PENALTY_MULTIPLIER;
 import org.example.model.Player;
 
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 

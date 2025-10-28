@@ -28,10 +28,16 @@
                 <td>{player.gamesLost}</td>
                 <td>{player.gamesDrawn}</td>
                 {#if player.isPresent}
-                    <td> <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent" checked> </td>
+                    <td>
+                        <label for="isPresentChecked"></label>
+                        <input type="checkbox" id="isPresentChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent" checked>
+                    </td>
                 {/if}
                 {#if !player.isPresent}
-                    <td> <input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent"> </td>
+                    <td>
+                        <label for="isPresentNotChecked">
+                        </label><input type="checkbox" id="isPresentNotChecked" onclick="toggleIsPresent({player.playerId})" name="isPresent">
+                    </td>
                 {/if}
 
             </tr>

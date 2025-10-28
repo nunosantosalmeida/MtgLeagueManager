@@ -30,6 +30,7 @@
                 <a href="http://localhost:8080/games/{gameView.gameId}">{gameView}</a>
             </td>
             <td>
+                <label for="dropdown_{gameView.gameId}"></label>
                 <select style="width: 80%;" id="dropdown_{gameView.gameId}">
                     <option value=""></option>
                     <option value="{gameView.player1id}"> {gameView.player1} </option>

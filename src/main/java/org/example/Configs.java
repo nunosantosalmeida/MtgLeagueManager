@@ -14,7 +14,7 @@ public class Configs {
     public static final float FIVE_PLAYER_POD_WIN_PONDERATION = 0.8f;
 
     public static final String DATE_FORMAT = "yyyy/MM/dd";
-    public static final String TIME_FORMAT = "HH:mm";;
+    public static final String TIME_FORMAT = "HH:mm";
 
     public static final String STANDARD_2DECIMAL_PRECISION = "%.2f";
 }
